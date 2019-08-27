@@ -1,15 +1,21 @@
 const typeDefs = `
   type Query {
     user(id: ID): [User!]!
-    post(id: ID): [Post!]!
-    category(id: ID): [Category!]!
-    skill: [Skill!]!
-    skillById(id: ID!): Skill!
   }
 
-  type Category{
+  type User{
     _id: ID!
-    name: String!
+    firstname: String!
+    lastname: String!
+    short_info: String
+    about: About
+    email: String!
+    skills: [Skill!]
+    works: [Work!]!
+    social: [Social!]!
+    gallery: [Gallery!]!
+    services: [Service!]!
+    reviews: [Review!]!
   }
 
   type Skill{
@@ -18,25 +24,48 @@ const typeDefs = `
     level: String!
   }
 
-  type User{
-    _id: ID!
-    name: String!
-    email: String!
-    posts: [Post!]!
+  type About{
+    image: String
+    body: String
+    school: String
+    college: String
+    website: String
   }
 
-  type Post{
+  type Work{
     _id: ID!
     title: String!
-    description: String!
-    author: User!
-    time: String!
+    image: String!
+    source_link: String!
+    view_link: String!
+  }
+
+  type Social{
+    _id: ID!
+    name: String!
+    link: String!
+  }
+
+  type Gallery{
+    _id: ID!
+    title: String!
+    image: String!
+  }
+  type Service{
+    _id: ID!
+    name: String!
+    details: String!
+  }
+  type Review{
+    _id: ID!
+    name: String!
+    message: String!
   }
 
   type Mutation{
-    registerUser(name: String!,email: String!,password: String!): Boolean!
+    registerUser(firstname: String!,lastname: String!,short_info: String!,email: String!,password: String!): Boolean!
     loginUser(email: String!,password: String!): String!
-    updateUser(_id: ID!,name: String!,email: String!,password: String!): User!
+    updateUser(_id: ID!,firstname: String!,lastname: String!,about: String!,email: String!,password: String!): User!
     deleteUser(id: ID!): User!
 
     createPost(title: String!,description: String!,author: ID!): Post!

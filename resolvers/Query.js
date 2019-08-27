@@ -6,7 +6,6 @@ const { GraphQLServer } = require('graphql-yoga');
 
 const Query = {
   async user(parent,args,{request},info){
-    // const isAuth = request.headers.get()
     const user = await User.find().select('-password')
     if(!user) throw new Error("Something is wrong!")
     if(args.id) return user.filter(i => i._id == args.id)

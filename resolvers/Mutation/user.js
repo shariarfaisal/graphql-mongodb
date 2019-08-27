@@ -2,10 +2,11 @@ const User = require('../../models/User')
 const bcrypt = require('bcryptjs')
 
 module.exports = {
-  async registerUser(parent,{name,email,password},ctx,info){
+  async registerUser(parent,args,ctx,info){
+    const {firstname,lastname,email,about,password} = args
     const match = await User.findOne({email})
     if(match) throw new Error("Email taken")
-    const user = await new User({name,email,password})
+    const user = await new User({firstname,lastname,email,about,password})
     if(!user) throw new Error("Something wrong!")
     const salt = await bcrypt.genSalt(12);
     user.password = await bcrypt.hash(password,salt);
@@ -20,12 +21,12 @@ module.exports = {
     return user.createToken()
   },
   async updateUser(parent,args,ctx,info){
-    const {_id,name,email,password} = args
+    const {_id,firstname,lastname,about,email,password} = args
     let user = await User.findById(_id);
     if(!user) throw new Error("User not found")
     const match = await bcrypt.compare(password,user.password);
     if(!match) throw new Error("Password is invalid")
-    user = await User.findByIdAndUpdate(_id,{$set: {name,email}},{new: true});
+    user = await User.findByIdAndUpdate(_id,{$set: {firstname,lastname,about,email}},{new: true});
     if(!user) throw new Error("Something wrong")
     return user
   },
