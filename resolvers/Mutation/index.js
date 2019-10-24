@@ -1,12 +1,20 @@
 const userMutation = require('./user')
-const postMutation = require('./post')
-const categoryMutation = require('./category')
 const skillMutation = require('./skill')
+const socialMutation = require('./social')
+const serviceMutation = require('./service')
+const reviewMutation = require('./review')
+
 const Mutation = {
   ...userMutation,
-  ...postMutation,
-  ...categoryMutation,
-  ...skillMutation
+  ...skillMutation,
+  ...socialMutation,
+  ...serviceMutation,
+  ...reviewMutation,
+  async singleUpload(parent,{file},ctx,info){
+    const {stream,filename,mimetype,encoding} = await file
+    console.log(filename);
+    
+  }
 }
 
 module.exports = Mutation

@@ -2,7 +2,6 @@ const { GraphQLServer } = require('graphql-yoga');
 const typeDefs = require('./typeDefs')
 const Query = require('./resolvers/Query')
 const Mutation = require('./resolvers/Mutation/index')
-const Post = require('./resolvers/Post')
 const User = require('./resolvers/User')
 const jwt = require('jsonwebtoken')
 const jwtDecode = require('jwt-decode')
@@ -21,12 +20,11 @@ const server = new GraphQLServer({
   resolvers:{
     Query,
     Mutation,
-    Post,
     User
   },
   context: req => {
     const {request} = req;
-    const userToken = request.get('user-token') || '';
+    const userToken = request.get('authorization') || '';
     const user = userAuth(userToken)
     return {user}
   }

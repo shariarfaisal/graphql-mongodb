@@ -1,25 +1,33 @@
-const Skill = require('../../models/Skill');
+const User = require('../../models/User');
 
 module.exports = {
-  async createSkill(parent,args,ctx,info){
-    const {name,level} = args;
-    const addSkill = await new Skill({name,level});
-    if(!addSkill) throw new Error("Something wrong")
-    await addSkill.save();
-    console.log(addSkill);
-    return addSkill;
+  async createSkill(parent,{data},ctx,info){
+    const {ownar,name,level} = data;
+    const user = await User.findOne({_id: ownar})
+    if(!user) throw new Error("User not found!")
+    const {skills} = user
+    const skill = skills.push({name: "javascript",level: 80})
+    await user.save()
+    return skills[skill-1]
   },
   async updateSkill(parent,args,ctx,info){
-    const {id,name,level} = args;
-    let skill = await Skill.findById(id);
-    if(!skill) throw new Error("Skill not found")
-    const updatedSkill = await Skill.findByIdAndUpdate(id,{$set: {name,level}},{new: true})
-    if(!updatedSkill) throw new Error("Something wrong!")
-    return updatedSkill;
+    const {id,ownar,name,level} = args.data
+    const user = await User.findOne({_id: ownar})
+    if(!user) throw new Error("User not found")
+    const skill = user.skills.find(i => i._id == id)
+    skill.name = name
+    skill.level = level
+    await user.save()
+    return skill
   },
   async deleteSkill(parent,args,ctx,info){
-    const skill = await Skill.findByIdAndDelete(args.id);
-    if(!skill) throw new Error("Skill not found or Something wrong")
-    return skill;
+    const {id,ownar} = args
+    const user = await User.findOne({_id: ownar})
+    if(!user) throw new Error("User not found");
+    const index = user.skills.findIndex(i => i._id == id)
+    if(index == -1) throw new Error("Skill not found")
+    const skill = user.skills.splice(index,1)
+    await user.save()
+    return skill[0]
   }
 }

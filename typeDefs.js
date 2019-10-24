@@ -1,21 +1,101 @@
 const typeDefs = `
+  scalar Upload
+  
   type Query {
-    user(id: ID): [User!]!
+    users: [User!]!
+    profile(username: String,id: ID): User!
+  }
+
+  type Mutation{
+    registerUser(data: CreateRegisterInput): Boolean!
+    loginUser(username: String!,password: String!): String!
+    updateUser(data:CreateUpdataRegisterInput): User!
+    deleteUser(id: ID!,password: String!): User!
+
+    createSkill(data:CreateSkillInput): Skill!
+    updateSkill(data: UpdateSkillInput): Skill!
+    deleteSkill(id: ID!,ownar: ID!): Skill!
+
+    createSocial(data: CreateSocialInput): Social!
+    updateSocial(data: UpdateSocialInput): Social!
+    deleteSocial(id: ID!,ownar: ID!): Social!
+
+    createService(ownar: ID!,name: String!,details: String!): Service!
+    updateService(id: ID!,ownar: ID!,name: String!,details: String!): Service!
+    deleteService(id: ID!,ownar: ID!): Service!
+
+    createReview(ownar: ID!,name: String!,body: String!): Review!
+    updateReview(id: ID!,ownar: ID!,name: String!,body: String!): Review!
+
+    singleUpload(file: Upload!): File!
+  }
+
+  type File{
+    filename: String!
+    mimetype: String!
+    encoding: String!
+  }
+
+  input CreateSocialInput{
+    ownar: ID!
+    name: String!
+    link: String!
+  }
+
+  input UpdateSocialInput{
+    id: ID!
+    ownar: ID!
+    name: String!
+    link: String!
+  }
+
+  input CreateSkillInput{
+    ownar: ID!
+    name: String!
+    level: String!
+  }
+
+  input UpdateSkillInput{
+    ownar: ID!
+    id: ID!
+    name: String!
+    level: String
+  }
+
+  input CreateRegisterInput{
+    firstname: String!
+    lastname: String!
+    username: String!
+    short_info: String!
+    email: String!
+    password: String!
+    confirmPassword: String!
+  }
+
+  input CreateUpdataRegisterInput{
+    _id: ID!
+    firstname: String!
+    lastname: String!
+    username: String!
+    short_info: String!
+    email: String!
+    password: String!
   }
 
   type User{
     _id: ID!
     firstname: String!
     lastname: String!
+    username: String!
     short_info: String
     about: About
     email: String!
     skills: [Skill!]
-    works: [Work!]!
-    social: [Social!]!
-    gallery: [Gallery!]!
-    services: [Service!]!
-    reviews: [Review!]!
+    works: [Work!]
+    socials: [Social!]
+    gallery: [Gallery!]
+    services: [Service!]
+    reviews: [Review!]
   }
 
   type Skill{
@@ -59,28 +139,8 @@ const typeDefs = `
   type Review{
     _id: ID!
     name: String!
-    message: String!
+    body: String!
   }
-
-  type Mutation{
-    registerUser(firstname: String!,lastname: String!,short_info: String!,email: String!,password: String!): Boolean!
-    loginUser(email: String!,password: String!): String!
-    updateUser(_id: ID!,firstname: String!,lastname: String!,about: String!,email: String!,password: String!): User!
-    deleteUser(id: ID!): User!
-
-    createPost(title: String!,description: String!,author: ID!): Post!
-    updatePost(id: ID!,title: String!,description: String!,author: ID!): Post!
-    deletePost(id: ID!,author: ID!): Post!
-
-    createCategory(name: String!): Category!
-    updateCategory(id: ID!,name: String!): Category!
-    deleteCategory(id:ID!): Category!
-
-    createSkill(name: String!,level: String!): Skill!
-    updateSkill(id: ID!,name: String!,level: String!): Skill!
-    deleteSkill(id: ID!): Skill!
-  }
-
 
 `
 module.exports = typeDefs

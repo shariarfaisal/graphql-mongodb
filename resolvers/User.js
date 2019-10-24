@@ -1,12 +1,6 @@
-const Post = require('../models/Post')
+const User = require('../models/User')
+const Skill = require('../models/Skill')
 
-const User = {
-  async posts(parent,args,ctx,info){
-    let posts = await Post.find()
-    return posts.filter(post => {
-      return post.author.toString() === parent._id.toString()
-    })
-  }
+module.exports = {
+
 }
-
-module.exports = User
